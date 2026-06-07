@@ -89,6 +89,7 @@ h1, h2, h3 { font-family: 'DM Serif Display', serif; font-weight: 400; }
 .exo-pb { font-size: 11px; color: var(--accent); }
 
 /* ── MODAL OVERLAY ── */
+#modalContent { display: flex; flex-direction: column; flex: 1; min-height: 0; overflow: hidden; }
 .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 100; display: none; align-items: stretch; justify-content: center; }
 .modal-overlay.open { display: flex; }
 .modal { background: var(--bg); width: 100%; max-width: 680px; margin: auto; height: 100dvh; display: flex; flex-direction: column; overflow: hidden; position: relative; }
