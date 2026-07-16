@@ -47,6 +47,7 @@ export interface Session {
 }
 
 export interface Settings {
+  legs: number;
   rest: number;
   restIso: number;
 }

@@ -174,7 +174,8 @@ export default function SessionModal({
       reps: set.reps || fallback?.reps || "",
       done: true,
     });
-    const restDuration = exercise.type === "iso" ? settings.restIso : settings.rest;
+    const restDuration =
+      exercise.id === "mer1" ? 210 : exercise.type === "iso" ? settings.restIso : settings.rest;
     const startAt = Date.now();
     setRest({ startAt, endAt: startAt + restDuration * 1000 });
     setNow(startAt);

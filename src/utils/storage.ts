@@ -5,7 +5,7 @@ const SESSIONS_KEY = "forge_sessions";
 const SETTINGS_KEY = "forge_settings";
 const DRAFT_KEY = "forge_draft";
 
-const DEFAULT_SETTINGS: Settings = { rest: 120, restIso: 75 };
+const DEFAULT_SETTINGS: Settings = { legs: 210, rest: 120, restIso: 75 };
 
 function readJSON<T>(key: string, fallback: T): T {
   try {
