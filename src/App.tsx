@@ -7,9 +7,16 @@ import TabNav from "./components/TabNav";
 import type { Tab } from "./components/TabNav";
 import History from "./pages/history";
 import Program from "./pages/program";
+import Weight from "./pages/weight";
 import "./styles/theme.css";
 import type { SessionDraft } from "./types";
-import { clearDraft, readDraft, useSessions, useSettings } from "./utils/storage";
+import {
+  clearDraft,
+  readDraft,
+  useSessions,
+  useSettings,
+  useWeightEntries,
+} from "./utils/storage";
 
 function App() {
   const [tab, setTab] = useState<Tab>("programme");
@@ -20,6 +27,7 @@ function App() {
 
   const { sessions, addSession, clearSessions } = useSessions();
   const { settings, setSettings } = useSettings();
+  const { entries: weightEntries, addWeightEntry, removeWeightEntry } = useWeightEntries();
 
   const launchDay = (dayIdx: number) => {
     if (draft) {
@@ -76,6 +84,14 @@ function App() {
         <Program sessions={sessions} onLaunch={launchDay} />
       )}
       {tab === "historique" && <History sessions={sessions} />}
+      {tab === "poids" && (
+        <Weight
+          entries={weightEntries}
+          height={settings.height}
+          onAdd={addWeightEntry}
+          onRemove={removeWeightEntry}
+        />
+      )}
 
       {modalDayIdx !== null && (
         <SessionModal

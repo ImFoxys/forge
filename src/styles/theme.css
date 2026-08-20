@@ -547,6 +547,99 @@ select {
   padding: 0 16px;
 }
 
+/* ---------- Weight tracking ---------- */
+
+.weight-form {
+  margin: 12px 16px 16px;
+  padding: 14px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+}
+
+.weight-form__field {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.weight-form__field label {
+  font-size: 11px;
+  color: var(--text3);
+}
+
+.weight-form__field input {
+  background: var(--surface2);
+  border: 1px solid var(--border2);
+  color: var(--text);
+  border-radius: 9px;
+  padding: 10px;
+  font-size: 15px;
+  width: 100%;
+}
+
+.weight-table-wrap {
+  margin: 0 16px 16px;
+  overflow-x: auto;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+}
+
+.weight-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.weight-table th,
+.weight-table td {
+  padding: 10px 12px;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.weight-table th {
+  color: var(--text3);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  border-bottom: 1px solid var(--border);
+}
+
+.weight-table tbody tr:not(:last-child) td {
+  border-bottom: 1px solid var(--border);
+}
+
+.weight-table__change--up {
+  color: var(--green);
+}
+
+.weight-table__change--down {
+  color: var(--red);
+}
+
+.weight-table__change--flat {
+  color: var(--amber);
+}
+
+.weight-table__delete {
+  border: none;
+  background: transparent;
+  color: var(--text3);
+  cursor: pointer;
+  font-size: 13px;
+  padding: 4px;
+}
+
+.weight-table__delete:hover {
+  color: var(--red);
+}
+
 /* ---------- Session modal ---------- */
 
 .modal-overlay {

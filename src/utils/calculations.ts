@@ -75,6 +75,11 @@ export function formatDuration(totalSeconds: number): string {
   return `${minutes}:${seconds}`;
 }
 
+export function computeBMI(weightKg: number, heightCm: number): number {
+  const heightM = heightCm / 100;
+  return weightKg / (heightM * heightM);
+}
+
 export function formatDate(timestamp: number): string {
   return new Date(timestamp).toLocaleDateString("fr-FR", {
     day: "2-digit",

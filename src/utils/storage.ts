@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
-import type { Session, SessionDraft, Settings } from "../types";
+import type { Session, SessionDraft, Settings, WeightEntry } from "../types";
 
 const SESSIONS_KEY = "forge_sessions";
 const SETTINGS_KEY = "forge_settings";
 const DRAFT_KEY = "forge_draft";
+const WEIGHT_KEY = "forge_weight";
 
-const DEFAULT_SETTINGS: Settings = { legs: 210, rest: 120, restIso: 75 };
+const DEFAULT_SETTINGS: Settings = { legs: 210, rest: 120, restIso: 75, height: 167 };
 
 function readJSON<T>(key: string, fallback: T): T {
   try {
@@ -41,15 +42,36 @@ export function useSessions() {
 }
 
 export function useSettings() {
-  const [settings, setSettings] = useState<Settings>(() =>
-    readJSON<Settings>(SETTINGS_KEY, DEFAULT_SETTINGS),
-  );
+  const [settings, setSettings] = useState<Settings>(() => ({
+    ...DEFAULT_SETTINGS,
+    ...readJSON<Partial<Settings>>(SETTINGS_KEY, {}),
+  }));
 
   useEffect(() => {
     writeJSON(SETTINGS_KEY, settings);
   }, [settings]);
 
   return { settings, setSettings };
+}
+
+export function useWeightEntries() {
+  const [entries, setEntries] = useState<WeightEntry[]>(() =>
+    readJSON<WeightEntry[]>(WEIGHT_KEY, []),
+  );
+
+  useEffect(() => {
+    writeJSON(WEIGHT_KEY, entries);
+  }, [entries]);
+
+  const addWeightEntry = (entry: WeightEntry) => {
+    setEntries((prev) => [...prev.filter((e) => e.date !== entry.date), entry]);
+  };
+
+  const removeWeightEntry = (date: number) => {
+    setEntries((prev) => prev.filter((e) => e.date !== date));
+  };
+
+  return { entries, addWeightEntry, removeWeightEntry };
 }
 
 export function readDraft(): SessionDraft | null {

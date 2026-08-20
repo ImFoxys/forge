@@ -50,6 +50,12 @@ export interface Settings {
   legs: number;
   rest: number;
   restIso: number;
+  height: number;
+}
+
+export interface WeightEntry {
+  date: number;
+  weight: number;
 }
 
 export interface SessionDraft {

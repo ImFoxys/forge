@@ -51,6 +51,22 @@ export default function SettingsPanel({
           }
         />
       </div>
+      <div className="settings-field">
+        <div className="settings-field__label">
+          <span>Taille</span>
+          <span className="value">{settings.height} cm</span>
+        </div>
+        <input
+          type="range"
+          min={140}
+          max={220}
+          step={1}
+          value={settings.height}
+          onChange={(e) =>
+            onChange({ ...settings, height: Number(e.target.value) })
+          }
+        />
+      </div>
       <button type="button" className="btn btn--danger" onClick={handleClear}>
         Effacer l'historique
       </button>

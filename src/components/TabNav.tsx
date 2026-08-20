@@ -1,4 +1,4 @@
-export type Tab = "programme" | "historique";
+export type Tab = "programme" | "historique" | "poids";
 
 interface TabNavProps {
   active: Tab;
@@ -21,6 +21,13 @@ export default function TabNav({ active, onChange }: TabNavProps) {
         onClick={() => onChange("historique")}
       >
         Historique
+      </button>
+      <button
+        type="button"
+        className={`tab-nav__btn${active === "poids" ? " tab-nav__btn--active" : ""}`}
+        onClick={() => onChange("poids")}
+      >
+        Poids
       </button>
     </nav>
   );
