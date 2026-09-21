@@ -1,15 +1,16 @@
 import { PROGRAM } from "../data/program";
-import type { Session } from "../types";
+import type { Memos, Session } from "../types";
 import { bestWeightForExercise, formatDate } from "../utils/calculations";
 import ExerciseCard from "./ExerciseCard";
 
 interface DayViewProps {
   dayIdx: number;
   sessions: Session[];
+  memos: Memos;
   onLaunch: () => void;
 }
 
-export default function DayView({ dayIdx, sessions, onLaunch }: DayViewProps) {
+export default function DayView({ dayIdx, sessions, memos, onLaunch }: DayViewProps) {
   const day = PROGRAM[dayIdx];
   const lastSession = sessions
     .filter((s) => s.dayIdx === dayIdx)
@@ -43,6 +44,7 @@ export default function DayView({ dayIdx, sessions, onLaunch }: DayViewProps) {
             key={exercise.id}
             order={i + 1}
             exercise={exercise}
+            memo={memos[exercise.id]}
             bestWeight={bestWeightForExercise(sessions, exercise.id)}
           />
         ))}

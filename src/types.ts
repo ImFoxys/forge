@@ -58,6 +58,9 @@ export interface WeightEntry {
   weight: number;
 }
 
+// Mémo libre par exercice (clé = id de l'exercice), affiché aux séances suivantes.
+export type Memos = Record<string, string>;
+
 export interface SessionDraft {
   dayIdx: number;
   exerciseIdx: number;

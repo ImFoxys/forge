@@ -7,6 +7,7 @@ interface SerieRowProps {
   status: "done" | "current" | "pending";
   prevWeight?: string;
   prevReps?: string;
+  prevSkipped?: boolean;
   forceFail?: boolean;
   inputRef?: RefObject<HTMLInputElement | null>;
   onChange: (field: "weight" | "reps", value: string) => void;
@@ -20,6 +21,7 @@ export default function SerieRow({
   status,
   prevWeight,
   prevReps,
+  prevSkipped,
   forceFail,
   inputRef,
   onChange,
@@ -69,6 +71,9 @@ export default function SerieRow({
         </div>
       </div>
       <div className="serie-row__actions">
+        {prevSkipped && status !== "done" && (
+          <span className="serie-row__skipped">Non faite la dernière fois</span>
+        )}
         {status === "done" ? (
           <button type="button" className="btn btn--sm btn--ghost" onClick={onModify}>
             Modifier

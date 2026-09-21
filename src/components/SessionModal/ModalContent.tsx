@@ -1,9 +1,10 @@
 import type { RefObject } from "react";
 import type { ProgramExercise, SessionExercise } from "../../types";
-import { formatDuration } from "../../utils/calculations";
+import { formatDuration, type PreviousSet } from "../../utils/calculations";
 import ExerciseTag from "../ExerciseTag";
 import RirBadge from "../RirBadge";
 import ImageCarousel from "./ImageCarousel";
+import MemoBox from "./MemoBox";
 import SerieRow from "./SerieRow";
 
 interface ModalContentProps {
@@ -13,7 +14,9 @@ interface ModalContentProps {
   totalExercises: number;
   progressPct: number;
   elapsed: number;
-  prevPerf: { weight: string; reps: string }[] | null;
+  prevPerf: PreviousSet[] | null;
+  memo: string;
+  onSetMemo: (text: string) => void;
   forceFailSetIdx: number | null;
   firstInputRef: RefObject<HTMLInputElement | null>;
   bodyRef: RefObject<HTMLDivElement | null>;
@@ -34,6 +37,8 @@ export default function ModalContent({
   progressPct,
   elapsed,
   prevPerf,
+  memo,
+  onSetMemo,
   forceFailSetIdx,
   firstInputRef,
   bodyRef,
@@ -79,6 +84,8 @@ export default function ModalContent({
 
         <div className="tips-box">{exercise.tips}</div>
 
+        <MemoBox key={exercise.id} memo={memo} onChange={onSetMemo} />
+
         <div className="series-list">
           {sessionExercise.sets.map((set, setIdx) => {
             const status = set.done ? "done" : setIdx === activeSetIdx ? "current" : "pending";
@@ -90,6 +97,7 @@ export default function ModalContent({
                 status={status}
                 prevWeight={prevPerf?.[setIdx]?.weight}
                 prevReps={prevPerf?.[setIdx]?.reps}
+                prevSkipped={prevPerf?.[setIdx]?.skipped}
                 forceFail={forceFailSetIdx === setIdx}
                 inputRef={setIdx === activeSetIdx ? firstInputRef : undefined}
                 onChange={(field, value) => onChangeField(setIdx, field, value)}

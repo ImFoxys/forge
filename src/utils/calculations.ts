@@ -19,17 +19,40 @@ export function bestWeightForExercise(
   return best;
 }
 
+export interface PreviousSet {
+  weight: string;
+  reps: string;
+  skipped: boolean;
+}
+
+function isPerformed(set: { weight: string; reps: string; done: boolean }): boolean {
+  return set.done && set.weight !== "" && set.reps !== "";
+}
+
+// Pour chaque série, reprend les valeurs de la dernière séance où elle a été
+// réellement faite. `skipped` vaut true si elle n'a pas été faite lors de la
+// toute dernière séance contenant cet exercice.
 export function lastPerformanceForExercise(
   sessions: Session[],
   exerciseId: string,
-): { weight: string; reps: string }[] | null {
+): PreviousSet[] | null {
   const past = sessions
     .filter((s) => s.exercises.some((e) => e.id === exerciseId))
     .sort((a, b) => b.date - a.date);
   if (past.length === 0) return null;
-  const exercise = past[0].exercises.find((e) => e.id === exerciseId);
-  if (!exercise) return null;
-  return exercise.sets.map((s) => ({ weight: s.weight, reps: s.reps }));
+  const history = past.map((s) => s.exercises.find((e) => e.id === exerciseId)!.sets);
+  const setCount = history[0].length;
+  const result: PreviousSet[] = [];
+  for (let i = 0; i < setCount; i++) {
+    const idx = history.findIndex((sets) => sets[i] && isPerformed(sets[i]));
+    if (idx === -1) {
+      result.push({ weight: "", reps: "", skipped: true });
+    } else {
+      const { weight, reps } = history[idx][i];
+      result.push({ weight, reps, skipped: idx > 0 });
+    }
+  }
+  return result;
 }
 
 export function lastSessionForDay(

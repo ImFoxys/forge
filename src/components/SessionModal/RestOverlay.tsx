@@ -1,9 +1,15 @@
+import type { ProgramExercise } from "../../types";
+import { resolveImage } from "../../utils/images";
 import { formatDuration } from "../../utils/calculations";
+import MemoBox from "./MemoBox";
 
 interface RestOverlayProps {
   remaining: number;
   total: number;
   nextLabel: string;
+  nextExercise: ProgramExercise | null;
+  memo: string;
+  onSetMemo: (text: string) => void;
   onSkip: () => void;
   onAdjust: (deltaSeconds: number) => void;
 }
@@ -15,11 +21,15 @@ export default function RestOverlay({
   remaining,
   total,
   nextLabel,
+  nextExercise,
+  memo,
+  onSetMemo,
   onSkip,
   onAdjust,
 }: RestOverlayProps) {
   const progress = total > 0 ? Math.max(0, Math.min(1, remaining / total)) : 0;
   const offset = CIRCUMFERENCE * (1 - progress);
+  const previewImage = nextExercise?.images[0] ? resolveImage(nextExercise.images[0]) : undefined;
 
   return (
     <div className="rest-overlay">
@@ -47,6 +57,18 @@ export default function RestOverlay({
           +30s
         </button>
       </div>
+      <div className="rest-overlay__memo">
+        <MemoBox memo={memo} onChange={onSetMemo} />
+      </div>
+      {nextExercise && previewImage && (
+        <div className="rest-overlay__preview">
+          <div className="rest-overlay__preview-text">
+            <div className="rest-overlay__preview-label">Prochain exercice :</div>
+            <div className="rest-overlay__preview-name">{nextExercise.name}</div>
+          </div>
+          <img src={previewImage} alt="" />
+        </div>
+      )}
       <button type="button" className="btn btn--primary" onClick={onSkip}>
         Passer le repos
       </button>

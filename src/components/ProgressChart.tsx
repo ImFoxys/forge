@@ -32,7 +32,20 @@ export default function ProgressChart({ sessions }: ProgressChartProps) {
     return Array.from(seen, ([id, name]) => ({ id, name }));
   }, []);
 
-  const [selected, setSelected] = useState(exerciseOptions[0]?.id ?? "");
+  const doneIds = useMemo(() => {
+    const ids = new Set<string>();
+    for (const session of sessions) {
+      for (const exercise of session.exercises) {
+        if (exercise.sets.some((set) => set.done)) ids.add(exercise.id);
+      }
+    }
+    return ids;
+  }, [sessions]);
+
+  const [choice, setSelected] = useState(exerciseOptions[0]?.id ?? "");
+  const selected = doneIds.has(choice)
+    ? choice
+    : (exerciseOptions.find((opt) => doneIds.has(opt.id))?.id ?? choice);
 
   const data = useMemo(() => {
     return sessions
@@ -60,7 +73,7 @@ export default function ProgressChart({ sessions }: ProgressChartProps) {
       <div className="progress-chart__title">Progression</div>
       <select value={selected} onChange={(e) => setSelected(e.target.value)}>
         {exerciseOptions.map((opt) => (
-          <option key={opt.id} value={opt.id}>
+          <option key={opt.id} value={opt.id} disabled={!doneIds.has(opt.id)}>
             {opt.name}
           </option>
         ))}

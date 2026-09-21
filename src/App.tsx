@@ -14,6 +14,7 @@ import {
   clearDraft,
   readDraft,
   useSessions,
+  useMemos,
   useSettings,
   useWeightEntries,
 } from "./utils/storage";
@@ -27,6 +28,7 @@ function App() {
 
   const { sessions, addSession, clearSessions } = useSessions();
   const { settings, setSettings } = useSettings();
+  const { memos, setMemo } = useMemos();
   const { entries: weightEntries, addWeightEntry, removeWeightEntry } = useWeightEntries();
 
   const launchDay = (dayIdx: number) => {
@@ -81,7 +83,7 @@ function App() {
       <TabNav active={tab} onChange={setTab} />
 
       {tab === "programme" && (
-        <Program sessions={sessions} onLaunch={launchDay} />
+        <Program sessions={sessions} memos={memos} onLaunch={launchDay} />
       )}
       {tab === "historique" && <History sessions={sessions} />}
       {tab === "poids" && (
@@ -99,6 +101,8 @@ function App() {
           draft={modalDraft}
           sessions={sessions}
           settings={settings}
+          memos={memos}
+          onSetMemo={setMemo}
           onClose={closeModal}
           onSave={(session) => {
             addSession(session);

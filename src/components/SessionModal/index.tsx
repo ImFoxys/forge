@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { PROGRAM } from "../../data/program";
-import type { Session, SessionDraft, SessionExercise, Settings } from "../../types";
+import type { Memos, Session, SessionDraft, SessionExercise, Settings } from "../../types";
 import {
   lastPerformanceForExercise,
   totalSetsForDay,
@@ -15,6 +15,8 @@ interface SessionModalProps {
   draft: SessionDraft | null;
   sessions: Session[];
   settings: Settings;
+  memos: Memos;
+  onSetMemo: (exerciseId: string, text: string) => void;
   onClose: () => void;
   onSave: (session: Session) => void;
 }
@@ -46,6 +48,8 @@ export default function SessionModal({
   draft,
   sessions,
   settings,
+  memos,
+  onSetMemo,
   onClose,
   onSave,
 }: SessionModalProps) {
@@ -244,6 +248,8 @@ export default function SessionModal({
             progressPct={progressPct}
             elapsed={elapsed}
             prevPerf={prevPerf}
+            memo={memos[exercise.id] ?? ""}
+            onSetMemo={(text) => onSetMemo(exercise.id, text)}
             forceFailSetIdx={forceFailSetIdx}
             firstInputRef={firstInputRef}
             bodyRef={bodyRef}
@@ -260,6 +266,9 @@ export default function SessionModal({
               remaining={restRemaining}
               total={restTotal}
               nextLabel={restNextLabel}
+              nextExercise={nextSetIdx === -1 ? nextExercise : null}
+              memo={memos[exercise.id] ?? ""}
+              onSetMemo={(text) => onSetMemo(exercise.id, text)}
               onSkip={() => setStatus("active")}
               onAdjust={handleAdjustRest}
             />

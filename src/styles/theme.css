@@ -837,6 +837,60 @@ select {
   line-height: 1.5;
 }
 
+.memo-box {
+  background: var(--red-dim);
+  border: 1px solid var(--red);
+  border-radius: 10px;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.memo-box--compact {
+  margin-top: 6px;
+  padding: 6px 10px;
+  font-size: 12px;
+  color: var(--red);
+}
+
+.memo-box__label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--red);
+}
+
+.memo-box__text {
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.5;
+  white-space: pre-wrap;
+}
+
+.memo-box__input {
+  width: 100%;
+  resize: vertical;
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--border2);
+  border-radius: 8px;
+  padding: 8px 10px;
+  font: inherit;
+  font-size: 14px;
+}
+
+.memo-box__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.memo-add {
+  align-self: flex-start;
+}
+
 .series-list {
   display: flex;
   flex-direction: column;
@@ -917,7 +971,16 @@ select {
 
 .serie-row__actions {
   display: flex;
+  align-items: center;
   justify-content: flex-end;
+  gap: 10px;
+}
+
+.serie-row__skipped {
+  margin-right: auto;
+  font-size: 12px;
+  font-style: italic;
+  color: var(--red);
 }
 
 .modal__footer {
@@ -946,6 +1009,59 @@ select {
   gap: 20px;
   padding: 24px;
   text-align: center;
+  overflow-y: auto;
+}
+
+.rest-overlay > :first-child {
+  margin-top: auto;
+}
+
+.rest-overlay > :last-child {
+  margin-bottom: auto;
+}
+
+.rest-overlay__memo {
+  width: 100%;
+  max-width: 420px;
+  text-align: center;
+}
+
+.rest-overlay__preview {
+  width: 100%;
+  max-width: 420px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 8px 8px 14px;
+  background: var(--surface, rgba(255, 255, 255, 0.05));
+  border: 1px solid var(--border, rgba(255, 255, 255, 0.1));
+  border-radius: 12px;
+  text-align: left;
+}
+
+.rest-overlay__preview img {
+  flex: none;
+  width: 96px;
+  height: 72px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.rest-overlay__preview-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.rest-overlay__preview-label {
+  font-size: 13px;
+  color: var(--text2);
+  margin-bottom: 4px;
+}
+
+.rest-overlay__preview-name {
+  font-weight: 600;
+  font-size: 15px;
 }
 
 .rest-overlay__label {

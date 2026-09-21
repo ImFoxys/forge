@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
-import type { Session, SessionDraft, Settings, WeightEntry } from "../types";
+import type { Memos, Session, SessionDraft, Settings, WeightEntry } from "../types";
 
 const SESSIONS_KEY = "forge_sessions";
 const SETTINGS_KEY = "forge_settings";
 const DRAFT_KEY = "forge_draft";
 const WEIGHT_KEY = "forge_weight";
+const MEMOS_KEY = "forge_memos";
 
 const DEFAULT_SETTINGS: Settings = { legs: 210, rest: 120, restIso: 75, height: 167 };
 
@@ -72,6 +73,25 @@ export function useWeightEntries() {
   };
 
   return { entries, addWeightEntry, removeWeightEntry };
+}
+
+export function useMemos() {
+  const [memos, setMemos] = useState<Memos>(() => readJSON<Memos>(MEMOS_KEY, {}));
+
+  useEffect(() => {
+    writeJSON(MEMOS_KEY, memos);
+  }, [memos]);
+
+  const setMemo = (exerciseId: string, text: string) => {
+    setMemos((prev) => {
+      const next = { ...prev };
+      if (text.trim()) next[exerciseId] = text.trim();
+      else delete next[exerciseId];
+      return next;
+    });
+  };
+
+  return { memos, setMemo };
 }
 
 export function readDraft(): SessionDraft | null {

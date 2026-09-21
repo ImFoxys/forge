@@ -5,12 +5,14 @@ interface ExerciseCardProps {
   order: number;
   exercise: ProgramExercise;
   bestWeight: number | null;
+  memo?: string;
 }
 
 export default function ExerciseCard({
   order,
   exercise,
   bestWeight,
+  memo,
 }: ExerciseCardProps) {
   return (
     <div className="exercise-card">
@@ -28,6 +30,7 @@ export default function ExerciseCard({
             Meilleure charge : {bestWeight} kg
           </div>
         )}
+        {memo && <div className="memo-box memo-box--compact">📌 {memo}</div>}
       </div>
     </div>
   );
