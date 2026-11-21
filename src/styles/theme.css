@@ -547,6 +547,14 @@ select {
   padding: 0 16px;
 }
 
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding-right: 16px;
+}
+
 /* ---------- Weight tracking ---------- */
 
 .weight-form {
