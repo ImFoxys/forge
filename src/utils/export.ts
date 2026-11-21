@@ -63,6 +63,23 @@ export function sessionsToCsv(sessions: Session[]): string {
           formatNumber(volume),
           set.done ? "oui" : "non",
         ]);
+        // Drops du drop-set : une ligne chacun, série notée « 3-drop1 », « 3-drop2 »…
+        set.drops?.forEach((drop, di) => {
+          const dw = toNumber(drop.weight);
+          const dr = toNumber(drop.reps);
+          rows.push([
+            date,
+            time,
+            dayLabel,
+            session.dayLabel,
+            exercise.name,
+            `${i + 1}-drop${di + 1}`,
+            formatNumber(dw),
+            formatNumber(dr),
+            formatNumber(dw !== null && dr !== null ? dw * dr : null),
+            set.done ? "oui" : "non",
+          ]);
+        });
       });
     }
   }

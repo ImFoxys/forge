@@ -5,6 +5,10 @@ interface EndScreenProps {
   validatedSets: number;
   volume: number;
   onSave: () => void;
+  // Alerte anti-doublon : message à confirmer avant d'enregistrer.
+  duplicateWarning: string | null;
+  onCancelDuplicate: () => void;
+  onConfirmDuplicate: () => void;
 }
 
 export default function EndScreen({
@@ -12,6 +16,9 @@ export default function EndScreen({
   validatedSets,
   volume,
   onSave,
+  duplicateWarning,
+  onCancelDuplicate,
+  onConfirmDuplicate,
 }: EndScreenProps) {
   return (
     <div className="end-screen">
@@ -30,9 +37,23 @@ export default function EndScreen({
           <div className="stat-tile__label">Volume (kg)</div>
         </div>
       </div>
-      <button type="button" className="btn btn--primary" onClick={onSave}>
-        Sauvegarder la séance
-      </button>
+      {duplicateWarning ? (
+        <div className="duplicate-warning" role="alertdialog" aria-live="assertive">
+          <p>{duplicateWarning}</p>
+          <div className="duplicate-warning__actions">
+            <button type="button" className="btn" onClick={onCancelDuplicate}>
+              Annuler
+            </button>
+            <button type="button" className="btn btn--primary" onClick={onConfirmDuplicate}>
+              Enregistrer
+            </button>
+          </div>
+        </div>
+      ) : (
+        <button type="button" className="btn btn--primary" onClick={onSave}>
+          Sauvegarder la séance
+        </button>
+      )}
     </div>
   );
 }

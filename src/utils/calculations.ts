@@ -1,4 +1,33 @@
-import type { Session } from "../types";
+import type { ProgramExercise, Session } from "../types";
+
+// Motif de reps d'une méthode par blocs : "3-4-5-6-7" → [3, 4, 5, 6, 7].
+export function repPattern(reps: string): number[] {
+  return reps.match(/\d+/g)?.map(Number) ?? [];
+}
+
+// Prescription affichée : « 3 × 6–8 », ou « 2 × 3-4-5-6-7 » pour la méthode 3/7.
+export function setsLabel(exercise: Pick<ProgramExercise, "sets" | "reps" | "method">): string {
+  if (exercise.method === "3/7") {
+    const blocks = Math.ceil(exercise.sets / Math.max(repPattern(exercise.reps).length, 1));
+    return `${blocks} × ${exercise.reps}`;
+  }
+  return `${exercise.sets} × ${exercise.reps}`;
+}
+
+// Repos après une série (en s). Méthode 3/7 : repos court entre mini-séries, long entre blocs.
+export function restAfterSet(
+  exercise: Pick<ProgramExercise, "id" | "type" | "rest" | "reps" | "method" | "restAfterBlock">,
+  setIdx: number,
+  settings: { rest: number; restIso: number },
+): number {
+  if (exercise.method === "3/7") {
+    const blockSize = repPattern(exercise.reps).length;
+    const endOfBlock = blockSize > 0 && (setIdx + 1) % blockSize === 0;
+    return endOfBlock ? (exercise.restAfterBlock ?? settings.restIso) : exercise.rest;
+  }
+  if (exercise.id === "mer1") return 210;
+  return exercise.type === "iso" ? settings.restIso : settings.rest;
+}
 
 export function bestWeightForExercise(
   sessions: Session[],

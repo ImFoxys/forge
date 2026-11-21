@@ -1,7 +1,9 @@
 import { useState } from "react";
-import DaysGrid from "../components/DaysGrid";
 import DayView from "../components/DayView";
+import NextSessionCard from "../components/NextSessionCard";
+import { DAY_ORDER, PROGRAM } from "../data/program";
 import type { Memos, Session } from "../types";
+import { getNextSession } from "../utils/rotation";
 
 interface ProgramProps {
   sessions: Session[];
@@ -10,16 +12,21 @@ interface ProgramProps {
 }
 
 export default function Program({ sessions, memos, onLaunch }: ProgramProps) {
-  const [activeDay, setActiveDay] = useState(0);
+  // null = séance proposée par la rotation ; sinon choix manuel.
+  const [chosenDay, setChosenDay] = useState<number | null>(null);
+  const activeDay = chosenDay ?? getNextSession(sessions, PROGRAM, DAY_ORDER).dayIdx;
 
   return (
     <>
-      <DaysGrid activeDay={activeDay} onSelect={setActiveDay} />
+      <NextSessionCard sessions={sessions} activeDay={activeDay} onSelect={setChosenDay} />
       <DayView
         dayIdx={activeDay}
         sessions={sessions}
         memos={memos}
-        onLaunch={() => onLaunch(activeDay)}
+        onLaunch={() => {
+          setChosenDay(null);
+          onLaunch(activeDay);
+        }}
       />
     </>
   );

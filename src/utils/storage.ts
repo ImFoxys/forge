@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
-import type { Memos, Session, SessionDraft, Settings, WeightEntry } from "../types";
+import type { Memos, Session, SessionDraft, Settings, Steps, WeightEntry } from "../types";
 
 const SESSIONS_KEY = "forge_sessions";
 const SETTINGS_KEY = "forge_settings";
 const DRAFT_KEY = "forge_draft";
 const WEIGHT_KEY = "forge_weight";
 const MEMOS_KEY = "forge_memos";
+const STEPS_KEY = "forge_steps";
 
 const DEFAULT_SETTINGS: Settings = { legs: 210, rest: 120, restIso: 75, height: 167 };
 
@@ -92,6 +93,26 @@ export function useMemos() {
   };
 
   return { memos, setMemo };
+}
+
+export function useSteps() {
+  const [steps, setSteps] = useState<Steps>(() => readJSON<Steps>(STEPS_KEY, {}));
+
+  useEffect(() => {
+    writeJSON(STEPS_KEY, steps);
+  }, [steps]);
+
+  // value null = revenir au cran automatique.
+  const setStep = (exerciseId: string, value: number | null) => {
+    setSteps((prev) => {
+      const next = { ...prev };
+      if (value && value > 0) next[exerciseId] = value;
+      else delete next[exerciseId];
+      return next;
+    });
+  };
+
+  return { steps, setStep };
 }
 
 export function readDraft(): SessionDraft | null {

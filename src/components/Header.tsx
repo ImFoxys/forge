@@ -9,7 +9,7 @@ export default function Header({ settingsOpen, onToggleSettings }: HeaderProps) 
       <div className="header__logo">
         FORGE
 
-        <span className="header__logo__version">v5</span>
+        <span className="header__logo__version">v6</span>
       </div>
       <div className="header__actions">
         <button

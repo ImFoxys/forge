@@ -1,11 +1,13 @@
 import type { RefObject } from "react";
-import type { ProgramExercise, SessionExercise } from "../../types";
-import { formatDuration, type PreviousSet } from "../../utils/calculations";
+import type { DropEntry, ProgramExercise, SessionExercise } from "../../types";
+import { formatDuration, setsLabel, type PreviousSet } from "../../utils/calculations";
+import type { Target } from "../../utils/progression";
 import ExerciseTag from "../ExerciseTag";
 import RirBadge from "../RirBadge";
 import ImageCarousel from "./ImageCarousel";
 import MemoBox from "./MemoBox";
 import SerieRow from "./SerieRow";
+import TargetBanner from "./TargetBanner";
 
 interface ModalContentProps {
   exercise: ProgramExercise;
@@ -15,6 +17,8 @@ interface ModalContentProps {
   progressPct: number;
   elapsed: number;
   prevPerf: PreviousSet[] | null;
+  target: Target;
+  onSetStep: (value: number | null) => void;
   memo: string;
   onSetMemo: (text: string) => void;
   forceFailSetIdx: number | null;
@@ -24,6 +28,8 @@ interface ModalContentProps {
   onChangeField: (setIdx: number, field: "weight" | "reps", value: string) => void;
   onValidateSet: (setIdx: number) => void;
   onModifySet: (setIdx: number) => void;
+  onChangeDrops: (setIdx: number, drops: DropEntry[]) => void;
+  suggestDrop: (from: number) => number | null;
   onPrev: () => void;
   onNext: () => void;
   isLastExercise: boolean;
@@ -37,6 +43,8 @@ export default function ModalContent({
   progressPct,
   elapsed,
   prevPerf,
+  target,
+  onSetStep,
   memo,
   onSetMemo,
   forceFailSetIdx,
@@ -46,6 +54,8 @@ export default function ModalContent({
   onChangeField,
   onValidateSet,
   onModifySet,
+  onChangeDrops,
+  suggestDrop,
   onPrev,
   onNext,
   isLastExercise,
@@ -76,11 +86,13 @@ export default function ModalContent({
         <div className="exercise-title-row">
           <h2>{exercise.name}</h2>
           <div className="exercise-card__specs mono">
-            {exercise.sets} × {exercise.reps} · {exercise.tempo}
+            {setsLabel(exercise)} · {exercise.tempo}
           </div>
           <ExerciseTag type={exercise.type} />
           <RirBadge rir={exercise.rir} rirType={exercise.rir_type} />
         </div>
+
+        <TargetBanner key={exercise.id} target={target} onSetStep={onSetStep} />
 
         <div className="tips-box">{exercise.tips}</div>
 
@@ -98,6 +110,16 @@ export default function ModalContent({
                 prevWeight={prevPerf?.[setIdx]?.weight}
                 prevReps={prevPerf?.[setIdx]?.reps}
                 prevSkipped={prevPerf?.[setIdx]?.skipped}
+                repsPlaceholder={
+                  target.decision === "first"
+                    ? undefined
+                    : target.decision === "down"
+                      ? String(target.repMax)
+                      : String(target.repTargets?.[setIdx] ?? `${target.repMin}–${target.repMax}`)
+                }
+                dropSet={exercise.dropSet === true && setIdx === exercise.sets - 1}
+                onDropsChange={(drops) => onChangeDrops(setIdx, drops)}
+                suggestDrop={suggestDrop}
                 forceFail={forceFailSetIdx === setIdx}
                 inputRef={setIdx === activeSetIdx ? firstInputRef : undefined}
                 onChange={(field, value) => onChangeField(setIdx, field, value)}

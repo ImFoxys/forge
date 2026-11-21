@@ -1,4 +1,5 @@
-import { PROGRAM } from "../data/program";
+import { DAY_ORDER, PROGRAM } from "../data/program";
+import { sessionTitle } from "../utils/rotation";
 import type { SessionDraft } from "../types";
 import { formatDuration } from "../utils/calculations";
 
@@ -9,7 +10,6 @@ interface ResumeBannerProps {
 }
 
 export default function ResumeBanner({ draft, onResume, onDiscard }: ResumeBannerProps) {
-  const day = PROGRAM[draft.dayIdx];
 
   const handleDiscard = () => {
     if (window.confirm("Abandonner cette séance en cours ? Les données saisies seront perdues.")) {
@@ -22,7 +22,7 @@ export default function ResumeBanner({ draft, onResume, onDiscard }: ResumeBanne
       <div className="resume-banner__text">
         <div className="resume-banner__title">Séance en cours</div>
         <div className="resume-banner__meta">
-          {day.label} — {day.muscles} · {formatDuration(draft.elapsed)} écoulées
+          {sessionTitle(PROGRAM, DAY_ORDER, draft.dayIdx)} · {formatDuration(draft.elapsed)} écoulées
         </div>
       </div>
       <div className="resume-banner__actions">

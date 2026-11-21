@@ -1,4 +1,5 @@
-import { PROGRAM } from "../data/program";
+import { DAY_ORDER, PROGRAM } from "../data/program";
+import { sessionTitle } from "../utils/rotation";
 import type { Memos, Session } from "../types";
 import { bestWeightForExercise, formatDate } from "../utils/calculations";
 import ExerciseCard from "./ExerciseCard";
@@ -19,7 +20,7 @@ export default function DayView({ dayIdx, sessions, memos, onLaunch }: DayViewPr
   return (
     <div className="day-view">
       <div className="day-view__header">
-        <div className="day-view__title">{day.full}</div>
+        <div className="day-view__title">{sessionTitle(PROGRAM, DAY_ORDER, dayIdx)}</div>
         <div className="day-view__meta">
           <span className="badge-duration">~{day.duration} min</span>
           {lastSession && (

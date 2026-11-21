@@ -1,4 +1,5 @@
 import type { ProgramExercise } from "../types";
+import { setsLabel } from "../utils/calculations";
 import ExerciseTag from "./ExerciseTag";
 
 interface ExerciseCardProps {
@@ -23,7 +24,7 @@ export default function ExerciseCard({
           <ExerciseTag type={exercise.type} />
         </div>
         <div className="exercise-card__specs mono">
-          {exercise.sets} × {exercise.reps} · {exercise.tempo} · {exercise.rir}
+          {setsLabel(exercise)} · {exercise.tempo} · {exercise.rir}
         </div>
         {bestWeight !== null && (
           <div className="exercise-card__best">
